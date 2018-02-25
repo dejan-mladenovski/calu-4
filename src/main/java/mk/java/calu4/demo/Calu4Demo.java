@@ -1,4 +1,4 @@
-package com.netcetera.calu4.demo;
+package mk.java.calu4.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
