@@ -109,8 +109,41 @@ to which endpoint it is mapped.
 public class HomeController {
 
   @RequestMapping(value = "/hello")
-  public String sayHello() {
-    return "view_say_hello";
-  }
+    public String sayHello(Model model) {
+      model.addAttribute("message", "Hey there! Do you like Spring?");
+      return "hello";
+    }
 }
+```
+
+# Adding views and view engines
+Setting up view engines has never been easier with Spring Boot. With a standard Spring application, you will need
+to add the view engine as a dependency, create a bean that will return the template engine instance, add settings
+for the engine... With Spring Boot, you just add the `spring-boot-starter-<engine>` dependency and Spring will do
+the rest. This package contains some default autoconfiguration for the engine and it will create an instance with some
+standard configuration, so the developer just adds the dependency and follows the engine's standards for creating views.
+
+For this demo we will use **Thymeleaf** (`spring-boot-starter-thymeleaf`).
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+```
+
+### Creating a Thymeleaf template
+After adding the dependency, create the views in `src/main/resources/templates` and Thymeleaf will do the rest.
+
+Here is the **hello.html** template
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Say hello</title>
+</head>
+<body>
+  <div th:text="${message}" />
+</body>
+</html>
 ```
