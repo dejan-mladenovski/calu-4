@@ -95,3 +95,22 @@ application is running on a http port.
 2018-02-25 20:41:54.039  INFO 6364 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
 2018-02-25 20:41:54.039  INFO 6364 --- [           main] com.netcetera.calu4.demo.Calu4Demo       : Started Calu4Demo in 2.826 seconds (JVM running for 3.93)
 ```
+# Creating controllers and endpoint handlers
+Controllers in Spring provide access to the application behavior that you typically define through services.
+Controllers interpret the user input, process the request and return a model that is represented to the user through a view. 
+
+To define a controller, just annotate a class with the `@Controller` annotation. But this is not enough. You will need to define
+a method that will do something when some URL is called. This is called routing. To define routes you need to create a method
+that will be executed then the URL is called. Next annotate the method with `@RequestMapping` and define a value
+to which endpoint it is mapped.
+
+```java
+@Controller
+public class HomeController {
+
+  @RequestMapping(value = "/hello")
+  public String sayHello() {
+    return "view_say_hello";
+  }
+}
+```
