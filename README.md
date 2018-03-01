@@ -147,3 +147,65 @@ Here is the **hello.html** template
 </body>
 </html>
 ```
+
+# Implement JPA and databases
+The best way to use databases in Spring is to use JPA (Java Persistence API). To implement this, we need to add JPA 
+dependency, and add a database connector. For the purposes of the demo we will use H2, but for a test or production
+environment, it is recommended to use some other database provider (MySQL, MS SQL, PostgreSQL,...). H2 is a compact
+database, that can be used as an in-memory or file database, and is commonly used for testing or local development.
+
+### Add dependencies
+We will need to add two dependencies: **H2** (`com.h2database:h2`, already provided with Spring Boot), and 
+**JPA** (along with the Spring autoconfiguration: `com.springframework.boot:spring-boot-starter-data-jpa`).
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+```
+### Configure the database connection
+Next we need to tell JPA to configure the database connection. This means specifying a type of the database, 
+or database driver, the connection URL to the database, and optionally, some other configuration for JPA and Hibernate.
+```properties
+spring.datasource.url:jdbc:h2:tcp:localhost/./database/sampledb;AUTO_SERVER=TRUE
+
+# Use H2 DB Driver
+spring.datasource.driverClassName:org.h2.Driver
+
+#spring.jpa.hibernate.ddl-auto=update
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.show-sql=true
+spring.jpa.hibernate.format_sql=true
+```
+### Create the table models
+Cool thing about JPA is that it can create the tables for us, just by specifying some parameters to the model. But we 
+will need to create the model. A model is simply a representation of a SQL table as a Java class. As an example, here is
+a model for a `User`.
+```java
+@Entity
+public class User {
+  @Id
+  @GeneratedValue
+  private Long id;
+  private String username;
+  private String password;
+}
+```
+### Create the repository
+The model is a representation of the SQL table, but what about fetching data? This can be done by 
+creating a repository. This repository will create a connection to the database, and perform operations on the data
+(fetch data, add new rows, delete rows, update rows). JPA offers some predefined methods, but the cool thing
+is that by using specific keywords in the naming of the methods, we can create custom queries. For example, 
+if we want to get the created users ordered by created date, we can create a method called
+`findAllOrderByDateCreated` and when called it will execute the query `SELECT * FROM Users ORDER BY dateCreated`. 
+The `JpaRepository` interface is configured with two parameters (`<User, Long>`). The first one is to specify to which
+model/table is this repository connected, and the second one is to specify the type of the primary key.
+```java
+public interface UsersRepository extends JpaRepository<User, Long> {
+  User findByName(String username);
+}
+```

@@ -1,0 +1,6 @@
+#FileLock
+#Thu Mar 01 22:14:45 CET 2018
+hostName=NB5214.one.nca
+id=161e36acdb727c571bbe3efd865e6358eab2e6cf6b2
+method=file
+server=192.168.100.4\:56036
