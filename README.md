@@ -209,3 +209,39 @@ public interface UsersRepository extends JpaRepository<User, Long> {
   User findByName(String username);
 }
 ```
+# Spring Security
+Some applications require for the users to be authenticated if they can manipulate with the apoplication's content.
+The most recognisable way to implement security is implementing authentication with username/password. You can use 
+`spring-boot-starter-security`, but that can be left for you to implement. Now, we will implement simple authentication 
+check, to check if the username and password can be found in the database. If they exist, then write down the username 
+in a session property. We alreay have a repository to fetch the data, we will just need to implement a method that will 
+check it.
+
+### Check if user can be authenticated
+To check if a user can be authenticated, find the user in the database, set the session property if exists and redirect 
+to a page.
+```java
+@RequestMapping(value = "login", method = RequestMethod.POST)
+  public String doLogin(@ModelAttribute User user, HttpSession session /*, ModelMap map*/) {
+    if (user != null && user.getUsername() != null) {
+      // perform check
+      User foundUser = userRepository.findByName(user.getUsername());
+      if (foundUser.getPassword().equals(user.getPassword())) {
+        session.setAttribute("loggedInUser", foundUser);
+        return "success";
+      }
+    }
+    // user failed to authenticate
+    return "forbidden";
+  }
+```
+### Check if a user is logged in before executing the endpoint
+To check if a user is logged in, just get the user from the session. If it is null, then the user is not
+logged in, and should be redirected to the login page. 
+```java
+if (httpSession.getAttribute("loggedInUser") != null) {
+  // user is logged in, perform intended function
+} else {
+  // user is not logged in, redirect to login page
+}
+```
