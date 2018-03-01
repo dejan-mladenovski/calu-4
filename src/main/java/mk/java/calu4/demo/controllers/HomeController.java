@@ -12,4 +12,14 @@ public class HomeController {
     model.addAttribute("message", "Hey there! Do you like Spring?");
     return "hello";
   }
+
+  @RequestMapping(value = "/")
+  public String displayIndex() {
+    return "index";
+  }
+
+  @RequestMapping(value = "/index")
+  public String displayIndexOther() {
+    return "index";
+  }
 }

@@ -28,8 +28,8 @@ public class LoginController {
   public String doLogin(@ModelAttribute User user, HttpSession session /*, ModelMap map*/) {
     if (user != null && user.getUsername() != null) {
       // perform check
-      User foundUser = userRepository.findByName(user.getUsername());
-      if (foundUser.getPassword().equals(user.getPassword())) {
+      User foundUser = userRepository.findByUsername(user.getUsername());
+      if (foundUser!= null && foundUser.getPassword().equals(user.getPassword())) {
         session.setAttribute("loggedInUser", foundUser);
         return "success";
       }
