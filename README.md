@@ -226,7 +226,7 @@ to a page.
     if (user != null && user.getUsername() != null) {
       // perform check
       User foundUser = userRepository.findByName(user.getUsername());
-      if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
+      if (foundfoundUser.getPassword().equals(user.getPassword())) {
         session.setAttribute("loggedInUser", foundUser);
         return "success";
       }
